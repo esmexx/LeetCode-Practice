@@ -10,12 +10,12 @@ struct ListNode{
     ListNode(int x) : val(x), next(NULL) {}
 };
 
-void pushNode(ListNode** ListHead, int val){
+void pushNode(ListNode*& list, int val){
     ListNode* newNode = new ListNode(val);
     // link the old list to the new node
-    newNode->next = (*ListHead);
+    newNode->next = list;
     // move the head to point to new node
-    (*ListHead) = newNode;
+    list = newNode;
 }
 
 void printList(ListNode* list){
@@ -70,19 +70,19 @@ int main() {
     ListNode* list2 = NULL;
 
     // fill in list1
-    pushNode(&list1, 5);
-    pushNode(&list1, 2);
-    pushNode(&list1, 4);
-    pushNode(&list1, 9);
+    pushNode(list1, 5);
+    pushNode(list1, 2);
+    pushNode(list1, 4);
+    pushNode(list1, 9);
 
     cout << "List 1 is ";
     printList(list1);
 
     // fill in list2
-    pushNode(&list2, 8);
-    pushNode(&list2, 2);
-    pushNode(&list2, 6);
-    pushNode(&list2, 7);
+    pushNode(list2, 8);
+    pushNode(list2, 2);
+    pushNode(list2, 6);
+    pushNode(list2, 7);
 
     cout << "List 2 is ";
     printList(list2);
