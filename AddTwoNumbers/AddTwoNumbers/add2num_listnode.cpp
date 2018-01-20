@@ -31,6 +31,7 @@ class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
         ListNode* l3 = NULL;
+        ListNode* l3_cur = NULL;
 
         int sum, res;
         while (l1 || l2){
@@ -44,21 +45,21 @@ public:
                 if (l1->next) ++l1->next->val;
                 else l1->next = new ListNode(1);
             }
-            
+
             l1 = l1->next;
             l2 = l2->next;
 
-            if (!l3) l3 = new ListNode(res);
-            else pushNode(&l3, res);
+            if (!l3) {
+            	l3 = new ListNode(res);
+                l3_cur = l3;
+        	}
+            else {
+                l3_cur->next = new ListNode(res);
+            	l3_cur = l3_cur->next;
+            }
         }
 
-        ListNode* l4 = NULL;
-        while (l3){
-            pushNode(&l4, l3->val);
-            l3 = l3->next;
-        }
-
-        return l4;
+        return l3;
     }
 };
 
