@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 using namespace std;
 
 // https://www.geeksforgeeks.org/sum-of-two-linked-lists/
@@ -29,53 +30,49 @@ void printList(ListNode* list){
 // https://www.geeksforgeeks.org/sum-of-two-linked-lists/
 class Solution{
 public:
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2, ListNode*& l3){
-        // traverse to the tail of the two lists
-        if (l1->next || l2->next){
-            if (!l1->next) return addTwoNumbers(l1, l2->next, l3);
-            if (!l2->next) return addTwoNumbers(l1->next, l2, l3);
-            return addTwoNumbers(l1->next, l2->next, l3);
-        } 
-        
-        int sum, res, sum2, res2;
-        sum = l1->val + l2->val;
-        res = sum % 10;
-        
-        if (sum >= 10){
-            if (!l3) {
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2){
+        // use stack to store the list nodes
+        stack<int> s1;
+        stack<int> s2;
+        while (l1){
+            s1.push(l1->val);
+            l1 = l1->next;
+        }
+        while (l2){
+            s2.push(l2->val);
+            l2 = l2->next;
+        }
+
+        ListNode* l3 = NULL;
+
+        while (!s1.empty() || !s2.empty()){
+            // fill in zero if one list is shorter than the other
+            if (s1.empty()) s1.push(0);
+            if (s2.empty()) s2.push(0);
+           
+            int sum, res, sum2, res2;
+            sum = s1.top() + s2.top();
+            res = sum % 10;
+
+            if (!l3){
                 l3 = new ListNode(res);
-                pushNode(l3, 1); 
+                if (sum >= 10) pushNode(l3, 1);
+                else pushNode(l3, 0);
             }
-            else {
+            else{
                 sum2 = l3->val + sum;
-                // sum2 must be between [10, 27]
-                if (sum2 >= 20){
-                    res2 = sum2 % 10;
-                    l3->val = res2;
-                    pushNode(l3, 2);
-                }
-                else {
-                    res2 = sum2 % 10;
-                    l3->val = res2;
-                    pushNode(l3, 1);
-                }
+                res2 = sum2 % 10;
+                l3->val = res2;
+                if (sum2 >= 10) pushNode(l3, 1);
+                else pushNode(l3, 0);
             }
+
+            s1.pop(); 
+            s2.pop();
         }
-        else {
-            if (!l3) l3 = new ListNode(res);
-            else {
-                sum2 = l3->val + sum;
-                // here, sum2 must be between [0, 18]
-                if (sum2 >= 10){
-                    res2 = sum2 % 10;
-                    l3->val = res2;
-                    pushNode(l3, 1);
-                }
-                else{
-                    l3->val = sum2;
-                }
-            }
-        }
+
+        // delete leading zeros
+        while (!l3->val) l3 = l3->next;
 
         return l3;
     }
@@ -88,21 +85,22 @@ int main() {
     ListNode* list2 = NULL;
     ListNode* list3 = NULL;
 
-    pushNode(list1, 3);
-    pushNode(list1, 6);
+    pushNode(list1, 2);
+    pushNode(list1, 8);
     pushNode(list1, 5);
-    pushNode(list1, 1);
+    pushNode(list1, 2);
 
     printList(list1);
 
-    pushNode(list2, 2);
+    pushNode(list2, 3);
+    pushNode(list2, 7);
     pushNode(list2, 4);
-    pushNode(list2, 8);
+    pushNode(list2, 2);
 
     printList(list2);
 
     Solution sln;
-    sln.addTwoNumbers(list1, list2, list3);
+    list3 = sln.addTwoNumbers(list1, list2);
 
     if (list3) printList(list3);
 
