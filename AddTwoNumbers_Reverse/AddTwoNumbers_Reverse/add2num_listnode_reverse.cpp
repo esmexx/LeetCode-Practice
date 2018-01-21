@@ -43,36 +43,29 @@ public:
             l2 = l2->next;
         }
 
-        ListNode* l3 = NULL;
+        ListNode* l3 = new ListNode(0);
+        int sum;
 
         while (!s1.empty() || !s2.empty()){
-            // fill in zero if one list is shorter than the other
-            if (s1.empty()) s1.push(0);
-            if (s2.empty()) s2.push(0);
-           
-            int sum, res, sum2, res2;
-            sum = s1.top() + s2.top();
-            res = sum % 10;
+            sum = l3->val;
+            if (!s1.empty()) sum += s1.top();
+            if (!s2.empty()) sum += s2.top();
 
-            if (!l3){
-                l3 = new ListNode(res);
-                if (sum >= 10) pushNode(l3, 1);
-                else pushNode(l3, 0);
+            if (sum >= 10){
+                l3->val = sum % 10;
+                if (!s1.empty()) s1.pop();
+                if (!s2.empty()) s2.pop();
+                pushNode(l3, 1);
             }
-            else{
-                sum2 = l3->val + sum;
-                res2 = sum2 % 10;
-                l3->val = res2;
-                if (sum2 >= 10) pushNode(l3, 1);
-                else pushNode(l3, 0);
+            else {
+                l3->val = sum;
+                if (!s1.empty()) s1.pop();
+                if (!s2.empty()) s2.pop();
+                // if there is no more nodes to sum, do not push 0; otherwise will have a leading 0
+                if (!s1.empty() || !s2.empty()) pushNode(l3, 0);
             }
-
-            s1.pop(); 
-            s2.pop();
         }
 
-        // delete leading zeros
-        while (!l3->val) l3 = l3->next;
 
         return l3;
     }
@@ -86,15 +79,13 @@ int main() {
     ListNode* list3 = NULL;
 
     pushNode(list1, 2);
-    pushNode(list1, 8);
-    pushNode(list1, 5);
-    pushNode(list1, 2);
+    pushNode(list1, 6);
+    pushNode(list1, 3);
 
     printList(list1);
 
-    pushNode(list2, 3);
-    pushNode(list2, 7);
     pushNode(list2, 4);
+    pushNode(list2, 5);
     pushNode(list2, 2);
 
     printList(list2);
