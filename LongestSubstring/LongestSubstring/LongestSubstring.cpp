@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,27 +15,15 @@ public:
         for (int i = 0; i<len; ++i)
             char2idx[i] = -1;
 
-        // the substring ranges from strl to strr
-        int strl = 0, strr = 0;
         int longest_str_len = 0;
 
-        while (strl<s.size() && strr<s.size()){
+        for (int strl = 0, strr = 0; strr < s.size();) {
 
-            if (char2idx[s[strr]] == -1 || char2idx[s[strr]]<strl) {
-                // if the char has not been seen or if it is not within the range of current substring
-                char2idx[s[strr]] = strr;
-            }
-            else {
-                // if the char has been seen, update the range of the substring
-                strl = ++char2idx[s[strr]];
-                char2idx[s[strr]] = strr;
-
-            }
-            // increase the length of the substring by moving strr to further right
+            strl = max(strl, ++char2idx[s[strr]]);
+            char2idx[s[strr]] = strr;
             ++strr;
 
-            int str_len = strr - strl;
-            if (str_len > longest_str_len) longest_str_len = str_len;
+            longest_str_len = max(strr-strl, longest_str_len);
 
         }
 
@@ -49,6 +38,7 @@ int main(){
     cout << sln.lengthOfLongestSubstring("abcabcbb") << endl;
     cout << sln.lengthOfLongestSubstring("bbbbb") << endl;
     cout << sln.lengthOfLongestSubstring("pwwkew") << endl;
+    cout << sln.lengthOfLongestSubstring("c") << endl;
 
     return 0;
 }
