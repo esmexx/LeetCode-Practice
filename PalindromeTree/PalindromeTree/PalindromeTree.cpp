@@ -1,5 +1,6 @@
 #include <iostream>
-#define MAXN 1000
+#include <map>
+#define MAXN 1002
 using namespace std;
 
 // EERTREE: An Ecient Data Structure for Processing Palindromes in Strings
@@ -9,8 +10,8 @@ using namespace std;
 struct node{
     string substr; // substring represented by the node
     int len; // length of the palindrome string stored in the node
-    int next[26]; // directed edge 
     int sufflink; // suffix link pointing to the largest suffix-palindrome
+    map<char, int> next; // directed edge
 };
 
 int maxlen = 0; // length of the longest palindromic substring
@@ -33,15 +34,16 @@ bool addLetter(int pos){
     }
 
     // check whether Q has an outgoing edge labeled by a
-    if (tree[cur].next[let]){
-        suff = tree[cur].next[let];
+    map<char, int>::const_iterator ilet = tree[cur].next.find(s[pos]);
+    if (ilet != tree[cur].next.end()){
+        suff = ilet->second;
         return false;
     }
     else {
         ++num;
         suff = num; // max suffix-palindrome is now the new node
         tree[num].len = tree[cur].len + 2;
-        tree[cur].next[let] = num;
+        tree[cur].next.insert(pair<char, int>(s[pos], num));
 
         if (tree[num].len == 1){ // suffix-palindrome pf node of len 1 is root with len 0
             tree[num].sufflink = 2;
@@ -55,7 +57,9 @@ bool addLetter(int pos){
                 curlen = tree[cur].len;
                 if (pos - curlen - 1 >= 0 && s[pos - curlen - 1] == s[pos]) break;
             }
-            tree[num].sufflink = tree[cur].next[let];
+
+            ilet = tree[cur].next.find(s[pos]);
+            tree[num].sufflink = ilet->second;
         }
 
         if (tree[num].len > maxlen) {
