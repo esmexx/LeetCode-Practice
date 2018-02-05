@@ -1,6 +1,6 @@
 #include <iostream>
 #include <map>
-#define MAXN 1002
+#define MAXN 1003 // required space: n + 2 + 1 (string length + 2 roots + tree index from 1)
 using namespace std;
 
 // EERTREE: An Ecient Data Structure for Processing Palindromes in Strings
