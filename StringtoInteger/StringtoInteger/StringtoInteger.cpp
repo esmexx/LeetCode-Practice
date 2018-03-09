@@ -20,31 +20,23 @@ public:
     }
 
     int myAtoi(string str){
-        int result = 0;
-        bool is_negative = false, check_digit = false;
+        int result = 0, idx = 0;
+        bool is_negative = false;
         str = trimLeadingSpace(str);
 
-
-        if (str[0] == '-') {
-            is_negative = true;
-            check_digit = true;
-        }
-
-        if (str[0] == '+') {
-            check_digit = true;
-        }
+        if (str[0] == '-') is_negative = true;
+        if (str[0] == '+') idx++;
 
         if (isdigit(str[0])){
             result = result * 10 + (str[0] - '0');
-            check_digit = true;
+            idx++;
         }
 
 
-
-        if (check_digit){
+        if (is_negative || idx > 0){
             for (int i = 1; i < str.length(); ++i){
                 if (isdigit(str[i])){
-                    if (result >= INT_MAX / 10 && (str[i] - '0') >(INT_MAX - INT_MAX / 10 * 10) || (isdigit(str[0]) && i > 9 || i > 10)){
+                    if (result >= INT_MAX / 10 && (str[i] - '0') > (INT_MAX % 10) || (isdigit(str[0]) && i > 9 || i > 10)){
                         is_negative ? result = abs(INT_MIN) : result = INT_MAX;
                     }
                     else { 
@@ -56,7 +48,7 @@ public:
             }
         }
 
-        is_negative ? result = -1 * result : result = result;
+        result = is_negative ? -1 * result : result;
 
         return result;
     }
