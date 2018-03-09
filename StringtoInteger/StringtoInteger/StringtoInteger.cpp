@@ -14,7 +14,7 @@ using namespace std;
 class Solution{
 public:
     string trimLeadingSpace(string str){
-        int p = str.find_first_not_of(" \t");
+        int p = str.find_first_not_of(' ');
         str.erase(0, p);
         return str;
     }
@@ -25,12 +25,12 @@ public:
         str = trimLeadingSpace(str);
 
 
-        if (str[0] == '\-') {
+        if (str[0] == '-') {
             is_negative = true;
             check_digit = true;
         }
 
-        if (str[0] == '\+') {
+        if (str[0] == '+') {
             check_digit = true;
         }
 
@@ -39,10 +39,17 @@ public:
             check_digit = true;
         }
 
+
+
         if (check_digit){
             for (int i = 1; i < str.length(); ++i){
                 if (isdigit(str[i])){
-                    result = result * 10 + (str[i] - '0');
+                    if (result >= INT_MAX / 10 && (str[i] - '0') >(INT_MAX - INT_MAX / 10 * 10) || (isdigit(str[0]) && i > 9 || i > 10)){
+                        is_negative ? result = abs(INT_MIN) : result = INT_MAX;
+                    }
+                    else { 
+                        result = result * 10 + (str[i] - '0'); 
+                    }
                     continue;
                 }
                 break;
