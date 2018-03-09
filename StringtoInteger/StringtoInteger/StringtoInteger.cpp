@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 using namespace std;
 
 //https://leetcode.com/problems/string-to-integer-atoi/description/
@@ -13,39 +12,24 @@ using namespace std;
 
 class Solution{
 public:
-    string trimLeadingSpace(string str){
-        int p = str.find_first_not_of(' ');
-        str.erase(0, p);
-        return str;
-    }
-
     int myAtoi(string str){
         int result = 0, idx = 0;
         bool is_negative = false;
-        str = trimLeadingSpace(str);
 
-        if (str[0] == '-') is_negative = true;
-        if (str[0] == '+') idx++;
+        while (str[idx] == ' ') idx++;
 
-        if (isdigit(str[0])){
-            result = result * 10 + (str[0] - '0');
+        if (str[idx] == '-' || str[idx] == '+'){
+            is_negative = (str[idx] == '-') ? true : false;
             idx++;
         }
 
-
-        if (is_negative || idx > 0){
-            for (int i = 1; i < str.length(); ++i){
-                if (isdigit(str[i])){
-                    if (result >= INT_MAX / 10 && (str[i] - '0') > (INT_MAX % 10) || (isdigit(str[0]) && i > 9 || i > 10)){
-                        is_negative ? result = abs(INT_MIN) : result = INT_MAX;
-                    }
-                    else { 
-                        result = result * 10 + (str[i] - '0'); 
-                    }
-                    continue;
-                }
+        while (str[idx] >= '0' && str[idx] <= '9'){
+            if ((result == INT_MAX / 10 && (str[idx] - '0') > INT_MAX % 10) || (result > INT_MAX / 10 && isdigit(str[idx]))){
+                is_negative ? result = abs(INT_MIN) : result = INT_MAX;
                 break;
             }
+            result = result * 10 + (str[idx] - '0');
+            idx++;
         }
 
         result = is_negative ? -1 * result : result;
