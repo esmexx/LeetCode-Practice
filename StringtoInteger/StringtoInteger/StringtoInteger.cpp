@@ -8,6 +8,8 @@ using namespace std;
 // 2. converted only numerical digits after an optional plus or minus sigh
 // 3. do no conversion if: (1) the first non-whitespace character is not a valid integral number
 //  (2) the string is empty or contains only whitespace characters
+// 4. If no valid conversion could be performed, a zero value is returned. If the correct value 
+//  is out of the range of representable values, INT_MAX (2147483647) or INT_MIN (-2147483648) is returned
 
 class Solution{
 public:
